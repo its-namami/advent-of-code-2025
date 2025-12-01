@@ -15,11 +15,9 @@ class RotationProcessor
       number = rotation.to_i
 
       case side
-      when 'L' then dial.rotate_left number
-      when 'R' then dial.rotate_right number
+      when 'L' then zeroes + dial.rotate_left(number)
+      when 'R' then zeroes + dial.rotate_right(number)
       end
-
-      dial.value.zero? ? zeroes + 1 : zeroes
     end
   end
 
