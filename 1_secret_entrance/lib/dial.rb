@@ -9,13 +9,13 @@ class Dial
   end
 
   def rotate_left(times)
-    new_value = value - (times % 99)
+    new_value = value - (times % 100)
 
     self.value = new_value.negative? ? 100 + new_value : new_value
   end
 
   def rotate_right(times)
-    new_value = value + (times % 99)
+    new_value = value + (times % 100)
 
     self.value = new_value > 99 ? new_value - 100 : new_value
   end

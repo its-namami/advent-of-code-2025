@@ -2,10 +2,6 @@
 
 require 'debug'
 
-require_relative 'lib/dial'
+require_relative 'lib/rotation_processor'
 
-dial = Dial.new
-
-dial.rotate_right 100
-
-puts dial.value
+puts RotationProcessor.new('./data/rotations.txt').password
