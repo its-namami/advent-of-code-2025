@@ -1,18 +1,27 @@
 # frozen_string_literal: true
 
-def add_joltage(joltage, sorted_pair)
-  [sorted_pair.last, joltage] if sorted_pair.first < joltage
+def remove_smallest(joltages)
+  possibilities = []
+
+  joltages.each.with_index do |_, index|
+    new_posssibility = joltages.dup
+    new_posssibility.delete_at(index)
+    possibilities << new_posssibility
+  end
+
+  possibilities.max
 end
 
-pairs_array = File.foreach('./data/input.txt').with_object([]) do |line, pairs|
-  pairs << line.chomp.each_char.with_object(%w[0 0]) do |joltage, pair|
-    sorted_pair = pair.last > pair.first ? ['/', pair.last] : pair.dup.sort
-    new_pair = add_joltage(joltage, sorted_pair)
+pairs_array = File.foreach('./data/input.txt').with_object([]) do |line, arrs|
+  arrs << line.chomp.each_char.with_object([]) do |joltage, battery|
+    battery << joltage
 
-    pair.replace(new_pair) if new_pair
+    next unless battery.size > 12
+
+    battery.replace(remove_smallest(battery))
   end
 end
 
-arrays_sum = pairs_array.map { |pair| pair.join.to_i }.sum
+arrays_sum = pairs_array.map { |pair| pair.join.to_i }
 
-puts arrays_sum
+puts arrays_sum.sum
