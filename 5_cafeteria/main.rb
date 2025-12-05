@@ -4,21 +4,14 @@ require 'debug'
 
 input = File.read('./data/input.txt')
 
-ranges, numbers = input.split("\n\n").map { |e| e.split("\n") }
+ranges = input.split("\n\n")[0].split("\n")
 
-numbers.map!(&:to_i)
+sum = ranges.each.with_object([]) do |range, unique_ranges|
+  first, last = range.split('-').map(&:to_i)
 
-sum = numbers.inject(0) do |sum, number|
-  ranges.each do |range|
-    first, last = range.split('-').map(&:to_i)
-
-    if (first..last).include?(number)
-      sum += 1
-      break
-    end
+  (first..last).each do |number|
+    unique_ranges << number unless unique_ranges.include?(number)
   end
-
-  sum
 end
 
-p sum
+puts sum.size
