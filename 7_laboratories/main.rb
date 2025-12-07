@@ -1,37 +1,25 @@
 # frozen_string_literal: true
 
-require 'debug'
-
 file_lines = File.read('./data/input.txt').split("\n")
 
-beams = [file_lines.slice!(0).index('S')]
 line_length = file_lines[0].length
+beams = Array.new(line_length, 0)
+beams[file_lines.slice!(0).index('S')] = 1
 
-times_split = file_lines.inject(0) do |times_split, line|
+file_lines.each do |line|
   splitters = line.each_char.to_a.filter_map.with_index { |e, i| i if e == '^' }
 
-  new_times_split = 0
-  new_beams = (splitters & beams).each.with_object([]) do |split, new_beams|
-    beams.delete split
-
-    new_times_split += 1
+  splitters.each do |split|
+    beam_val = beams[split]
+    beams[split] = 0
 
     if split.zero?
-      new_beams << split + 1
+      beams[split + 1] += beam_val
     else
-      new_beams << split - 1
-      new_beams << split + 1 if split < line_length
+      beams[split - 1] += beam_val
+      beams[split + 1] += beam_val if split < line_length
     end
-  end
-
-  if new_beams.empty?
-    times_split
-  else
-    new_beams.uniq!
-    beams += new_beams
-
-    times_split + new_times_split
   end
 end
 
-puts times_split
+puts beams.sum
